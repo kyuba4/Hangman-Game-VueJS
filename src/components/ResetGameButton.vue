@@ -1,5 +1,5 @@
 <template>
-   <div></div>
+   <button class="reset" @click="$emit('clicked')">Reset</button>
 </template>
 <script>
 export default {
@@ -7,4 +7,19 @@ export default {
 };
 </script>
 <style lang="scss">
+.reset {
+   display: flex;
+   justify-content: center;
+   margin: 0 auto;
+   margin-top: 5rem;
+   padding: 10px 20px;
+   border: 0;
+   outline: 0;
+   background: var(--text-color);
+   color: var(--bg-color);
+   cursor: pointer;
+   box-shadow: 0 0 3px 0 var(--text-color);
+   transition: all 300ms;
+   border-radius: 5px;
+}
 </style>

@@ -1,26 +1,105 @@
 <template>
    <div>
+      <div class="switch-wrap"><ThemeSwitcher /></div>
       <h1>Hangman</h1>
-      <div class="switch-wrap">
-         <ThemeSwitcher />
+      <div class="chances-left">Chances Left: {{ chancesLeft }}</div>
+      <div class="clue">Clue: {{ clue }}</div>
+      <div class="word">
+         {{ currentStateOfWord }}
       </div>
-      <Keyboard @btnClicked="btnClicked" />
+      <Keyboard @btnClicked="checkLetterInWord" v-show="!gameLost && !gameWon" />
+      <div class="msg lost" v-show="gameLost">
+         You lost<br /><span>The word was: {{ word }}</span>
+      </div>
+      <div class="msg won" v-show="gameWon">
+         Congrats!<br />
+         <span>You Won</span>
+      </div>
+      <ResetGameButton @clicked="resetGame" />
    </div>
 </template>
 
 <script>
 import ThemeSwitcher from "../components/ThemeSwitcher.vue";
 import Keyboard from "../components/Keyboard.vue";
+import ResetGameButton from "../components/ResetGameButton.vue";
 
 export default {
    name: "Home",
    components: {
       ThemeSwitcher,
       Keyboard,
+      ResetGameButton,
+   },
+   data() {
+      return {
+         chancesLeft: 6,
+         clue: "",
+         word: "",
+         currentStateOfWord: "",
+      };
    },
    methods: {
-      btnClicked(letter) {
-         console.log(letter);
+      checkLetterInWord(id) {
+         // Index of guessing word
+         let letterIndex = [];
+
+         if (this.word.includes(id)) {
+            this.word.split("").forEach((letter, index) => {
+               letter == id ? letterIndex.push(index) : null;
+            });
+            this.updateCurrentStateOfWord(letterIndex);
+         } else {
+            this.chancesLeft--;
+         }
+      },
+      updateCurrentStateOfWord(index) {
+         let updatedState = this.currentStateOfWord.split("");
+         const wordLetters = this.word.split("");
+
+         for (let i in index) {
+            updatedState[index[i]] = wordLetters[index[i]];
+         }
+
+         this.currentStateOfWord = updatedState.join("");
+
+         console.log(this.currentStateOfWord);
+      },
+      async setWord() {
+         const response = await fetch("https://random-words-api.vercel.app/word");
+         const data = await response.json();
+
+         this.word = data[0].word.toLowerCase();
+         this.clue = data[0].definition;
+
+         console.log(this.word);
+
+         // Change word's letters to '_' e.g. horse = _ _ _ _ _
+         this.currentStateOfWord = this.word
+            .split("")
+            .map((letter) => {
+               letter = "_";
+               return letter;
+            })
+            .join("");
+      },
+      resetGame() {
+         this.setWord();
+         this.chancesLeft = 6;
+         document.querySelectorAll("button").forEach((button) => {
+            button.removeAttribute("disabled");
+         });
+      },
+   },
+   created() {
+      this.setWord();
+   },
+   computed: {
+      gameLost() {
+         return this.chancesLeft == 0;
+      },
+      gameWon() {
+         return this.word == this.currentStateOfWord;
       },
    },
 };
@@ -28,13 +107,58 @@ export default {
 <style lang="scss" scoped>
 h1 {
    color: var(--text-color);
-   font-size: 4rem;
+   font-size: 5rem;
    text-align: center;
+   transition: color 300ms;
 }
 
 .switch-wrap {
    position: absolute;
    top: 30px;
    right: 30px;
+}
+
+.chances-left,
+.word,
+.clue {
+   color: var(--text-color);
+   transition: color 300ms;
+   text-align: center;
+   margin: 10px 0;
+}
+
+.chances-left {
+   font-size: 2rem;
+   font-weight: bold;
+}
+
+.clue {
+   font-size: 1.1rem;
+}
+
+.word {
+   margin: 40px 0;
+   font-size: 2rem;
+   text-transform: uppercase;
+}
+
+.msg {
+   color: var(--text-color);
+   text-transform: uppercase;
+   font-size: 2.5rem;
+   font-weight: bold;
+   text-align: center;
+
+   span {
+      color: var(--text-color);
+   }
+
+   &.lost {
+      color: red;
+   }
+
+   &.won {
+      color: greenyellow;
+   }
 }
 </style>

@@ -7,13 +7,10 @@
 <script>
 export default {
    methods: {
-      getTheme() {
+      setTheme() {
          const theme = localStorage.getItem("theme");
 
-         return theme;
-      },
-      setTheme() {
-         if (this.getTheme() == "light") {
+         if (theme == "light") {
             document.body.className = "light-theme";
          } else {
             document.body.className = "dark-theme";
@@ -43,6 +40,13 @@ html {
 body {
    height: 100%;
    background: var(--bg-color);
+   overflow-y: hidden;
+}
+
+#app {
+   width: 100%;
+   height: 100%;
+   margin-top: 80px;
 }
 
 .light-theme {
