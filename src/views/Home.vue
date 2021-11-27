@@ -4,7 +4,7 @@
       <div class="switch-wrap">
          <ThemeSwitcher />
       </div>
-      <Keyboard />
+      <Keyboard @btnClicked="btnClicked" />
    </div>
 </template>
 
@@ -18,7 +18,11 @@ export default {
       ThemeSwitcher,
       Keyboard,
    },
-   methods: {},
+   methods: {
+      btnClicked(letter) {
+         console.log(letter);
+      },
+   },
 };
 </script>
 <style lang="scss" scoped>
