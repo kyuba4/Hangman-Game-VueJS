@@ -1,18 +1,36 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+   <div>
+      <h1>Hangman</h1>
+      <div class="switch-wrap">
+         <ThemeSwitcher />
+      </div>
+      <Keyboard />
+   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import ThemeSwitcher from "../components/ThemeSwitcher.vue";
+import Keyboard from "../components/Keyboard.vue";
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+   name: "Home",
+   components: {
+      ThemeSwitcher,
+      Keyboard,
+   },
+   methods: {},
+};
 </script>
+<style lang="scss" scoped>
+h1 {
+   color: var(--text-color);
+   font-size: 4rem;
+   text-align: center;
+}
+
+.switch-wrap {
+   position: absolute;
+   top: 30px;
+   right: 30px;
+}
+</style>
