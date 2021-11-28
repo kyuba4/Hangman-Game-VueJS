@@ -40,13 +40,12 @@ html {
 body {
    height: 100%;
    background: var(--bg-color);
-   overflow-y: hidden;
 }
 
 #app {
    width: 100%;
    height: 100%;
-   margin-top: 50px;
+   padding: 15px;
 }
 
 .light-theme {

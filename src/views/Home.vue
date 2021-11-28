@@ -16,11 +16,11 @@
          </div>
          <Keyboard @btnClicked="checkLetterInWord" v-show="!gameLost && !gameWon" />
          <div class="msg lost" v-show="gameLost && word">
-            You lost<br /><span>The word was: {{ word }}</span>
+            You lost :(<br /><span>The word was: {{ word }}</span>
          </div>
          <div class="msg won" v-show="gameWon && word">
             Congrats!<br />
-            <span>You Won</span>
+            <span>You Won!</span>
          </div>
          <ResetGameButton @clicked="resetGame" />
       </div>
@@ -189,6 +189,7 @@ h1 {
 
    span {
       color: var(--text-color);
+      font-size: 2rem;
    }
 
    &.lost {
@@ -197,6 +198,28 @@ h1 {
 
    &.won {
       color: greenyellow;
+   }
+}
+
+@media (max-width: 500px) {
+   h1 {
+      font-size: 3rem;
+   }
+
+   .chances-left {
+      font-size: 1.4rem;
+   }
+
+   .clue {
+      font-size: 0.9rem;
+   }
+}
+
+@media (max-width: 650px) {
+   .switch-wrap {
+      top: 5px;
+      right: 5px;
+      transform: scale(0.9);
    }
 }
 </style>
