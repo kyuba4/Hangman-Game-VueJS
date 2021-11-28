@@ -2,20 +2,28 @@
    <div>
       <div class="switch-wrap"><ThemeSwitcher /></div>
       <h1>Hangman</h1>
-      <div class="chances-left">Chances Left: {{ chancesLeft }}</div>
-      <div class="clue">Clue: {{ clue }}</div>
-      <div class="word">
-         {{ currentStateOfWord }}
+      <div class="loader-wrap">
+         <Loader v-show="loading" />
       </div>
-      <Keyboard @btnClicked="checkLetterInWord" v-show="!gameLost && !gameWon" />
-      <div class="msg lost" v-show="gameLost">
-         You lost<br /><span>The word was: {{ word }}</span>
+      <div v-show="!loading">
+         <div class="chances-left">Chances Left: {{ chancesLeft }}</div>
+         <div class="clue">Clue: {{ clue }}</div>
+         <div class="hangman-img">
+            <img :src="require(`../../src/assets/${currentImage}.jpg`)" alt="" />
+         </div>
+         <div class="word">
+            {{ currentStateOfWord }}
+         </div>
+         <Keyboard @btnClicked="checkLetterInWord" v-show="!gameLost && !gameWon" />
+         <div class="msg lost" v-show="gameLost && word">
+            You lost<br /><span>The word was: {{ word }}</span>
+         </div>
+         <div class="msg won" v-show="gameWon && word">
+            Congrats!<br />
+            <span>You Won</span>
+         </div>
+         <ResetGameButton @clicked="resetGame" />
       </div>
-      <div class="msg won" v-show="gameWon">
-         Congrats!<br />
-         <span>You Won</span>
-      </div>
-      <ResetGameButton @clicked="resetGame" />
    </div>
 </template>
 
@@ -23,6 +31,7 @@
 import ThemeSwitcher from "../components/ThemeSwitcher.vue";
 import Keyboard from "../components/Keyboard.vue";
 import ResetGameButton from "../components/ResetGameButton.vue";
+import Loader from "../components/Loader.vue";
 
 export default {
    name: "Home",
@@ -30,10 +39,13 @@ export default {
       ThemeSwitcher,
       Keyboard,
       ResetGameButton,
+      Loader,
    },
    data() {
       return {
          chancesLeft: 6,
+         currentImage: 0,
+         loading: false,
          clue: "",
          word: "",
          currentStateOfWord: "",
@@ -51,6 +63,7 @@ export default {
             this.updateCurrentStateOfWord(letterIndex);
          } else {
             this.chancesLeft--;
+            this.currentImage++;
          }
       },
       updateCurrentStateOfWord(index) {
@@ -66,6 +79,7 @@ export default {
          console.log(this.currentStateOfWord);
       },
       async setWord() {
+         this.loading = true;
          const response = await fetch("https://random-words-api.vercel.app/word");
          const data = await response.json();
 
@@ -82,10 +96,13 @@ export default {
                return letter;
             })
             .join("");
+
+         this.loading = false;
       },
       resetGame() {
          this.setWord();
          this.chancesLeft = 6;
+         this.currentImage = 0;
          document.querySelectorAll("button").forEach((button) => {
             button.removeAttribute("disabled");
          });
@@ -127,6 +144,13 @@ h1 {
    margin: 10px 0;
 }
 
+.loader-wrap {
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+
 .chances-left {
    font-size: 2rem;
    font-weight: bold;
@@ -140,6 +164,20 @@ h1 {
    margin: 40px 0;
    font-size: 2rem;
    text-transform: uppercase;
+}
+
+.hangman-img {
+   margin: 0 auto;
+   position: relative;
+   width: 150px;
+   height: 150px;
+
+   img {
+      position: absolute;
+      left: 30%;
+      width: 100%;
+      height: 100%;
+   }
 }
 
 .msg {

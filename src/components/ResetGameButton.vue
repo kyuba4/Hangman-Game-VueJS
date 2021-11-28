@@ -21,5 +21,9 @@ export default {
    box-shadow: 0 0 3px 0 var(--text-color);
    transition: all 300ms;
    border-radius: 5px;
+
+   &:hover {
+      opacity: 0.8;
+   }
 }
 </style>
