@@ -5,7 +5,7 @@
       <div class="loader-wrap">
          <Loader v-show="loading" />
       </div>
-      <div v-show="!loading">
+      <div v-show="!loading" style="padding-bottom: 5px">
          <div class="chances-left">Chances Left: {{ chancesLeft }}</div>
          <div class="clue">Clue: {{ clue }}</div>
          <div class="hangman-img">
