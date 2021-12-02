@@ -40,6 +40,7 @@ html {
 body {
    height: 100%;
    background: var(--bg-color);
+   transition: background 300ms;
 }
 
 #app {

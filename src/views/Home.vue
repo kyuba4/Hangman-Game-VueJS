@@ -15,10 +15,10 @@
             {{ currentStateOfWord }}
          </div>
          <Keyboard @btnClicked="checkLetterInWord" v-show="!gameLost && !gameWon" />
-         <div class="msg lost" v-show="gameLost && word">
+         <div class="msg msg--lost" v-show="gameLost && word">
             You lost<br /><span>The word was: {{ gameLost ? word : "" }}</span>
          </div>
-         <div class="msg won" v-show="gameWon && word">
+         <div class="msg msg--won" v-show="gameWon && word">
             Congrats!<br />
             <span>You Won!</span>
          </div>
@@ -179,7 +179,6 @@ h1 {
 }
 
 .msg {
-   color: var(--text-color);
    text-transform: uppercase;
    font-size: 2.5rem;
    font-weight: bold;
@@ -188,13 +187,14 @@ h1 {
    span {
       color: var(--text-color);
       font-size: 2rem;
+      transition: color 300ms;
    }
 
-   &.lost {
+   &--lost {
       color: red;
    }
 
-   &.won {
+   &--won {
       color: greenyellow;
    }
 }
@@ -215,8 +215,8 @@ h1 {
 
 @media (max-width: 650px) {
    .switch-wrap {
-      top: 5px;
-      right: 5px;
+      top: 15px;
+      right: 10px;
       transform: scale(0.9);
    }
 }

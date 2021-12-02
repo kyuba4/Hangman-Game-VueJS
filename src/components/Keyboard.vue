@@ -52,7 +52,6 @@ export default {
 
    .button {
       text-align: center;
-      padding: 8px 15px;
       width: 50px;
       height: 50px;
       font-size: 1.3rem;
@@ -76,6 +75,17 @@ export default {
          pointer-events: none;
          transform-origin: center;
          transform: scale(0.9) rotateY(360deg);
+      }
+   }
+
+   @media (max-width: 650px) {
+      gap: 15px;
+
+      .button {
+         width: 40px;
+         height: 40px;
+         font-size: 1rem;
+         padding: 0;
       }
    }
 }

@@ -60,6 +60,11 @@ export default {
 .change-theme-txt {
    font-size: 0.8rem;
    color: var(--text-color);
+   transition: color 300ms;
+
+   @media (max-width: 650px) {
+      display: none;
+   }
 }
 
 .switch-wrapper {

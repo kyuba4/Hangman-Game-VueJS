@@ -10,8 +10,7 @@ export default {
 .reset {
    display: flex;
    justify-content: center;
-   margin: 0 auto;
-   margin-top: 5rem;
+   margin: 3rem auto;
    padding: 10px 20px;
    border: 0;
    outline: 0;
