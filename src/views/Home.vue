@@ -101,7 +101,7 @@ export default {
          this.setWord();
          this.chancesLeft = 6;
          this.currentImage = 0;
-         document.querySelectorAll("button").forEach((button) => {
+         this.$el.querySelectorAll(".button").forEach((button) => {
             button.removeAttribute("disabled");
          });
       },

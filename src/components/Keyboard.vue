@@ -31,7 +31,7 @@ export default {
          });
       },
       disableButton(letter) {
-         document.getElementById(letter).disabled = true;
+         this.$el.querySelector(`#${letter}`).setAttribute("disabled", true);
       },
    },
    created() {
