@@ -16,7 +16,7 @@
          </div>
          <Keyboard @btnClicked="checkLetterInWord" v-show="!gameLost && !gameWon" />
          <div class="msg lost" v-show="gameLost && word">
-            You lost<br /><span>The word was: {{ word }}</span>
+            You lost<br /><span>The word was: {{ gameLost ? word : "" }}</span>
          </div>
          <div class="msg won" v-show="gameWon && word">
             Congrats!<br />
