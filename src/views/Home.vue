@@ -9,14 +9,14 @@
          <div class="chances-left">Chances Left: {{ chancesLeft }}</div>
          <div class="clue">Clue: {{ clue }}</div>
          <div class="hangman-img">
-            <img :src="require(`../../src/assets/${currentImage}.jpg`)" alt="" />
+            <img :src="require(`../../src/assets/${currentImage}.jpg`)" alt="Hangman Image" draggable="false" />
          </div>
          <div class="word">
             {{ currentStateOfWord }}
          </div>
          <Keyboard @btnClicked="checkLetterInWord" v-show="!gameLost && !gameWon" />
          <div class="msg lost" v-show="gameLost && word">
-            You lost :(<br /><span>The word was: {{ word }}</span>
+            You lost<br /><span>The word was: {{ word }}</span>
          </div>
          <div class="msg won" v-show="gameWon && word">
             Congrats!<br />
@@ -43,41 +43,15 @@ export default {
    },
    data() {
       return {
+         loading: false,
          chancesLeft: 6,
          currentImage: 0,
-         loading: false,
          clue: "",
          word: "",
          currentStateOfWord: "",
       };
    },
    methods: {
-      checkLetterInWord(id) {
-         // Index of guessing word
-         let letterIndex = [];
-
-         if (this.word.includes(id)) {
-            this.word.split("").forEach((letter, index) => {
-               letter == id ? letterIndex.push(index) : null;
-            });
-            this.updateCurrentStateOfWord(letterIndex);
-         } else {
-            this.chancesLeft--;
-            this.currentImage++;
-         }
-      },
-      updateCurrentStateOfWord(index) {
-         let updatedState = this.currentStateOfWord.split("");
-         const wordLetters = this.word.split("");
-
-         for (let i in index) {
-            updatedState[index[i]] = wordLetters[index[i]];
-         }
-
-         this.currentStateOfWord = updatedState.join("");
-
-         console.log(this.currentStateOfWord);
-      },
       async setWord() {
          this.loading = true;
          const response = await fetch("https://random-words-api.vercel.app/word");
@@ -86,7 +60,9 @@ export default {
          this.word = data[0].word.toLowerCase();
          this.clue = data[0].definition;
 
-         console.log(this.word);
+         if (this.word.includes("-")) {
+            this.setWord();
+         }
 
          // Change word's letters to '_' e.g. horse = _ _ _ _ _
          this.currentStateOfWord = this.word
@@ -98,6 +74,28 @@ export default {
             .join("");
 
          this.loading = false;
+      },
+      checkLetterInWord(id) {
+         // Index of guessing letter
+         let letterIndex = [];
+
+         if (this.word.includes(id)) {
+            this.word.split("").forEach((letter, index) => {
+               letter == id ? letterIndex.push(index) : null;
+            });
+            this.currentStateOfWord = this.updateCurrentStateOfWord(letterIndex);
+         } else {
+            this.chancesLeft--;
+            this.currentImage++;
+         }
+      },
+      updateCurrentStateOfWord(index) {
+         let newWordState = this.currentStateOfWord.split("");
+         for (let i in index) {
+            newWordState[index[i]] = this.word.split("")[index[i]];
+         }
+
+         return newWordState.join("");
       },
       resetGame() {
          this.setWord();
@@ -169,8 +167,8 @@ h1 {
 .hangman-img {
    margin: 0 auto;
    position: relative;
-   width: 150px;
-   height: 150px;
+   width: 100px;
+   height: 175px;
 
    img {
       position: absolute;
